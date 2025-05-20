@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Panel</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+    th { background-color: #f2f2f2; }
+  </style>
+</head>
+<body>
+  <h1>Contact Submissions</h1>
+  <table id="contactTable">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Message</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    fetch("/admin/contacts")
+      .then(res => res.json())
+      .then(data => {
+        const tbody = document.querySelector("#contactTable tbody");
+        data.forEach(contact => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${contact.name}</td>
+            <td>${contact.email}</td>
+            <td>${contact.message}</td>
+            <td>${new Date(contact.date).toLocaleString()}</td>
+          `;
+          tbody.appendChild(row);
+        });
+      })
+      .catch(err => {
+        console.error("Error fetching contacts:", err);
+      });
+  </script>
+</body>
+</html>
